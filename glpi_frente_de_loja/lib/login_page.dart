@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
             children: [
               const TextField(
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Login',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   // TODO: Adicionar lógica de login real
                   // Por enquanto, vamos simular o login e navegar para a home.
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );

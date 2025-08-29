@@ -33,6 +33,7 @@ class _FormPageState extends State<FormPage> {
       // Limpar os campos após o envio
       _topicController.clear();
       _textController.clear();
+      Navigator.pop(context);
     }
   }
 
@@ -47,7 +48,7 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo Formulário'),
+        title: const Text('Novo Chamado'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -61,13 +62,13 @@ class _FormPageState extends State<FormPage> {
               TextFormField(
                 controller: _topicController,
                 decoration: const InputDecoration(
-                  labelText: 'Tópico',
+                  labelText: 'Caixa*',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.subject),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o tópico';
+                    return 'Por favor, insira o caixa';
                   }
                   return null;
                 },
@@ -79,17 +80,11 @@ class _FormPageState extends State<FormPage> {
                 controller: _textController,
                 maxLines: 5,
                 decoration: const InputDecoration(
-                  labelText: 'Texto',
+                  labelText: 'Observação',
                   alignLabelWithHint: true,
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.text_fields),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o texto';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 16),
 
@@ -112,10 +107,10 @@ class _FormPageState extends State<FormPage> {
               // Botão de Envio
               ElevatedButton(
                 onPressed: _submitForm,
-                child: const Text('Enviar'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
+                child: const Text('Enviar'),
               ),
             ],
           ),
