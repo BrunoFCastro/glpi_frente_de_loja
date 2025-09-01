@@ -1,4 +1,3 @@
-// lib/home_page.dart
 import 'package:flutter/material.dart';
 import 'form_page.dart';
 
@@ -16,8 +15,6 @@ class HomePage extends StatelessWidget {
     {'text': 'Sistema', 'icon': Icons.web, 'color': Colors.teal},
     {'text': 'Computador', 'icon': Icons.computer, 'color': Colors.brown},
   ];
-  
-  BuildContext? get context => null;
 
   Widget buildClickableBox(Map<String, dynamic> item, BuildContext context) {
     return SizedBox(
@@ -28,6 +25,7 @@ class HomePage extends StatelessWidget {
           elevation: 5,
           child:
             InkWell(
+              borderRadius: BorderRadius.circular(12),
               onTap: () {
                 // Ação ao clicar na caixa
                 Navigator.push(
@@ -62,14 +60,28 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Wrap(
-          spacing: 16.0, // Espaçamento horizontal entre os widgets
-          runSpacing: 16.0, // Espaçamento vertical entre as linhas
-          alignment: WrapAlignment.center, // Alinha os widgets ao centro
-          children: items.map((item) => buildClickableBox(item, context)).toList(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chamados'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          
+          child: 
+          // if (contraint.maxWidth < constraint.maxHeight) [
+
+          // ] else [
+
+          // ]
+
+          Wrap(
+            spacing: 16.0, // Espaçamento horizontal entre os widgets
+            runSpacing: 16.0, // Espaçamento vertical entre as linhas
+            alignment: WrapAlignment.center, // Alinha os widgets ao centro
+            children: items.map((item) => buildClickableBox(item, context)).toList(),
+          ),
         ),
       ),
     );

@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'GLPI Frente de Loja',
+      theme: ThemeData.light(),
       home: const LoginPage(),
-
     );
   }
 }
