@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'form_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  // Lista de dados para cada caixa: texto, ícone e cor
   final List<Map<String, dynamic>> items = const [
     {'text': 'Impressora HP', 'icon': Icons.print, 'color': Colors.blue},
     {'text': 'Bematech', 'icon': Icons.print, 'color': Colors.green},
@@ -18,8 +18,8 @@ class HomePage extends StatelessWidget {
 
   Widget buildClickableBox(Map<String, dynamic> item, BuildContext context) {
     return SizedBox(
-        width: 200, // Largura fixa para cada caixa
-        height: 200, // Altura fixa
+        width: 200,
+        height: 200,
         child: Card(
           color: item['color'],
           elevation: 5,
@@ -27,7 +27,6 @@ class HomePage extends StatelessWidget {
             InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                // Ação ao clicar na caixa
                 Navigator.push(
                   context, 
                   MaterialPageRoute(builder: (context) => const FormPage()),
@@ -60,6 +59,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chamados'),
@@ -68,24 +69,18 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          
-          child: 
-          // if (contraint.maxWidth < constraint.maxHeight) [
-
-          // ] else [
-
-          // ]
-
-          Wrap(
-            spacing: 16.0, // Espaçamento horizontal entre os widgets
-            runSpacing: 16.0, // Espaçamento vertical entre as linhas
-            alignment: WrapAlignment.center, // Alinha os widgets ao centro
+          child: GridView(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: queryData.orientation == Orientation.portrait ? queryData.size.width * 0.5 : queryData.size.width * 0.25,
+              crossAxisSpacing: 16.0,
+              mainAxisSpacing: 16.0,
+              childAspectRatio: 1,
+              mainAxisExtent: queryData.orientation == Orientation.portrait ? queryData.size.height * 0.2 : queryData.size.height * 0.4,
+            ),
             children: items.map((item) => buildClickableBox(item, context)).toList(),
           ),
         ),
       ),
     );
   }
-
-  
 }
