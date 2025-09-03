@@ -6,7 +6,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final List<Map<String, dynamic>> items = const [
-    {'text': 'Impressora HP', 'icon': Icons.print, 'color': Colors.blue},
+    {'text': 'Impressora HP', 'icon': Icons.print, 'color': Colors.blue, 'descrição': 'Impressora HP'},
     {'text': 'Bematech', 'icon': Icons.print, 'color': Colors.green},
     {'text': 'Pinpad', 'icon': Icons.credit_card, 'color': Colors.orange},
     {'text': 'Scanner de Mão', 'icon': Icons.barcode_reader, 'color': Colors.purple},

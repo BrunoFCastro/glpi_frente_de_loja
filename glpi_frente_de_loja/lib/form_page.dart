@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -18,10 +19,21 @@ class _FormPageState extends State<FormPage> {
   // Método para lidar com o envio do formulário
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      // TODO: Adicionar lógica de envio do formulário
       // Se o formulário for válido, execute a ação de envio
       // Você pode coletar os dados aqui:
       // String topic = _topicController.text;
       // String text = _textController.text;
+      // Future<http.Response> formulario() {
+      //   return http.post(
+      //     Uri.parse('http://seu-servidor-glpi/apirest.php/Ticket'),
+      //     headers: 
+      //       <String, String>{'Content-Type': 'application/json'},
+      //       <String, String>{'Session-Token': "83af7e620c83a50a18d3eac2f6ed05a3ca0bea62"},
+      //       <String, String> {"App-Token: f7g3csp8mgatg5ebc5elnazakw20i9fyev1qopya7"},
+      //       -d '{"input": {"name": "My single computer", "serial": "12345"}}' \
+      //   );
+      // }
 
       // Exemplo de como mostrar uma mensagem de sucesso
       ScaffoldMessenger.of(context).showSnackBar(
