@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'home_page.dart';
 
@@ -10,10 +11,16 @@ class LoginPage extends StatelessWidget {
 
   Future<http.Response> authenticate(String username, String password) {
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
-    return http.get(
-      Uri.parse('http://seu-servidor-glpi/apirest.php/initSession'),
-      headers: <String, String>{'authorization': basicAuth},
+    String AppToken = dotenv.env{'APP_TOKEN'}
+    final response = http.get(
+      Uri.parse('${dotenv.env['API_URL']}initSession'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'authorization': basicAuth,
+        'App-Token': ,
+        },
     );
+    return 0;
   }
 
   // 200 (OK) with the session_token string.
