@@ -9,18 +9,26 @@ class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
   static Base64Codec base64 = Base64Codec();
 
-  Future<http.Response> authenticate(String username, String password) {
+  Future authenticate(String username, String password) async {
     String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
-    String AppToken = dotenv.env{'APP_TOKEN'}
-    final response = http.get(
+    final response = await http.get(
       Uri.parse('${dotenv.env['API_URL']}initSession'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'authorization': basicAuth,
-        'App-Token': ,
+        'App-Token': dotenv.env['APP_TOKEN']!,
         },
     );
-    return 0;
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+    if (response.statusCode == 200) {
+      return responseJson['session_token'];
+    } else if (response.statusCode == 400) {
+      throw Exception('Login failed with status: ${response.statusCode} Bad Request: ${responseJson['message']}');
+    } else {
+      print('Login failed with status: ${response.statusCode}');
+      throw Exception('Login failed with status: ${response.statusCode} UNAUTHORIZED: ${responseJson['message']}');
+    }
   }
 
   // 200 (OK) with the session_token string.
