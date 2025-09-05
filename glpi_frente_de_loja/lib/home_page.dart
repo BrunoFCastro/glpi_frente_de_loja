@@ -3,25 +3,27 @@ import 'package:flutter/material.dart';
 import 'form_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.sessionToken});
 
-  final List<Map<String, dynamic>> items = const [
-    {'text': 'Impressora HP', 'icon': Icons.print, 'color': Colors.blue, 'descrição': 'Impressora HP'},
-    {'text': 'Bematech', 'icon': Icons.print, 'color': Colors.green},
-    {'text': 'Pinpad', 'icon': Icons.credit_card, 'color': Colors.orange},
-    {'text': 'Scanner de Mão', 'icon': Icons.barcode_reader, 'color': Colors.purple},
-    {'text': 'Scanner de Mesa', 'icon': Icons.chrome_reader_mode, 'color': Colors.red},
-    {'text': 'Monitor', 'icon': Icons.monitor, 'color': Colors.pink},
-    {'text': 'Sistema', 'icon': Icons.web, 'color': Colors.teal},
-    {'text': 'Computador', 'icon': Icons.computer, 'color': Colors.brown},
+  final List<Map<String, dynamic>> botoes = const [
+    {'caso': 'Impressora HP', 'icone': Icons.print, 'color': Colors.blue},
+    {'caso': 'Bematech', 'icone': Icons.print, 'color': Colors.green},
+    {'caso': 'Pinpad', 'icone': Icons.credit_card, 'color': Colors.orange},
+    {'caso': 'Scanner de Mão', 'icone': Icons.barcode_reader, 'color': Colors.purple},
+    {'caso': 'Scanner de Mesa', 'icone': Icons.chrome_reader_mode, 'color': Colors.red},
+    {'caso': 'Monitor', 'icone': Icons.monitor, 'color': Colors.pink},
+    {'caso': 'Sistema', 'icone': Icons.web, 'color': Colors.teal},
+    {'caso': 'Computador', 'icone': Icons.computer, 'color': Colors.brown},
   ];
+  
+  final dynamic sessionToken;
 
-  Widget buildClickableBox(Map<String, dynamic> item, BuildContext context) {
+  Widget buildClickableBox(Map<String, dynamic> botao, BuildContext context) {
     return SizedBox(
         width: 200,
         height: 200,
         child: Card(
-          color: item['color'],
+          color: botao['color'],
           elevation: 5,
           child:
             InkWell(
@@ -29,7 +31,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => const FormPage()),
+                  MaterialPageRoute(builder: (context) => FormPage(sessionToken: sessionToken, caso: botao['caso'],)),
                 );
               },
               child: 
@@ -37,13 +39,13 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  item['icon'],
+                  botao['icone'],
                   size: 50,
                   color: Colors.white,
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  item['text'],
+                  botao['caso'],
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -77,7 +79,7 @@ class HomePage extends StatelessWidget {
               childAspectRatio: 1,
               mainAxisExtent: queryData.orientation == Orientation.portrait ? queryData.size.height * 0.2 : queryData.size.height * 0.4,
             ),
-            children: items.map((item) => buildClickableBox(item, context)).toList(),
+            children: botoes.map((botao) => buildClickableBox(botao, context)).toList(),
           ),
         ),
       ),

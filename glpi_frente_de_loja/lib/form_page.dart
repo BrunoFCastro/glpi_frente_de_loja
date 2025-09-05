@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class FormPage extends StatefulWidget {
-  const FormPage({super.key});
+  const FormPage({super.key, required this.sessionToken, required this.caso});
+
+  final dynamic sessionToken;
+  final dynamic caso;
 
   @override
   State<FormPage> createState() => _FormPageState();
@@ -13,8 +16,8 @@ class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controladores para os campos de texto
-  final _topicController = TextEditingController();
-  final _textController = TextEditingController();
+  final _caixaController = TextEditingController();
+  final _descricaoController = TextEditingController();
 
   // Método para lidar com o envio do formulário
   void _submitForm() {
@@ -22,8 +25,8 @@ class _FormPageState extends State<FormPage> {
       // TODO: Adicionar lógica de envio do formulário
       // Se o formulário for válido, execute a ação de envio
       // Você pode coletar os dados aqui:
-      // String topic = _topicController.text;
-      // String text = _textController.text;
+      // String topic = _caixaController.text;
+      // String text = _descricaoController.text;
       // Future<http.Response> formulario() {
       //   return http.post(
       //     Uri.parse('http://seu-servidor-glpi/apirest.php/Ticket'),
@@ -41,16 +44,16 @@ class _FormPageState extends State<FormPage> {
       );
 
       // Limpar os campos após o envio
-      _topicController.clear();
-      _textController.clear();
+      _caixaController.clear();
+      _descricaoController.clear();
       Navigator.pop(context);
     }
   }
 
   @override
   void dispose() {
-    _topicController.dispose();
-    _textController.dispose();
+    _caixaController.dispose();
+    _descricaoController.dispose();
     super.dispose();
   }
 
@@ -70,7 +73,7 @@ class _FormPageState extends State<FormPage> {
             children: [
               // Campo para o Tópico
               TextFormField(
-                controller: _topicController,
+                controller: _caixaController,
                 decoration: const InputDecoration(
                   labelText: 'Caixa*',
                   border: OutlineInputBorder(),
@@ -87,7 +90,7 @@ class _FormPageState extends State<FormPage> {
 
               // Campo para o Texto
               TextFormField(
-                controller: _textController,
+                controller: _descricaoController,
                 maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Observação',

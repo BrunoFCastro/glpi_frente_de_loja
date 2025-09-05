@@ -15,13 +15,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginController = TextEditingController();
-  final senhaController = TextEditingController();
+  final _loginController = TextEditingController();
+  final _senhaController = TextEditingController();
 
   @override
   void dispose() {
-    loginController.dispose();
-    senhaController.dispose();
+    _loginController.dispose();
+    _senhaController.dispose();
     super.dispose();
   }
 
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: queryData.size.width * 0.6,
                 child: TextField(
-                  controller: loginController,
+                  controller: _loginController,
                   decoration: const InputDecoration(
                     labelText: 'Login',
                     border: OutlineInputBorder(),
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: queryData.size.width * 0.6,
                 child:  TextField(
-                  controller: senhaController,
+                  controller: _senhaController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Senha',
@@ -90,12 +90,11 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: () {
                   // TODO: Adicionar lógica de login real
-                  // Por enquanto, vamos simular o login e navegar para a home.
-                  final sessao = authenticate(loginController.text, senhaController.text);
+                  final sessao = authenticate(_loginController.text, _senhaController.text);
                   if (sessao.statusCode == 200) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(builder: (context) => HomePage(sessionToken: sessao.body,)),
                     );
                   } else {
                     throw sessao.statusCode;
@@ -113,4 +112,6 @@ class _LoginPageState extends State<LoginPage> {
 
 extension on Future<http.Response> {
   get statusCode => null;
+  
+   get body => null;
 }
