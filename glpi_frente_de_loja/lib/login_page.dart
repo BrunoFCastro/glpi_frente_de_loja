@@ -25,9 +25,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<http.Response> authenticate(String username, String password) {
+  Future<http.Response> authenticate(String username, String password) async {
     String basicAuth = 'Basic ${LoginPage.base64.encode(utf8.encode('$username:$password'))}';
-    return http.get(
+    return await http.get(
       Uri.parse('${dotenv.env['API_URL']}initSession'),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -37,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // 200 (OK) with the session_token string.
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData;
@@ -89,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  // TODO: Adicionar lógica de login real
                   final sessao = authenticate(_loginController.text, _senhaController.text);
                   if (sessao.statusCode == 200) {
                     Navigator.push(

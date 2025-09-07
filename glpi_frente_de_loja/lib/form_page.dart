@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key, required this.sessionToken, required this.caso});
@@ -12,41 +13,40 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  // Chave global para identificar e validar o formulário
   final _formKey = GlobalKey<FormState>();
 
-  // Controladores para os campos de texto
   final _caixaController = TextEditingController();
   final _descricaoController = TextEditingController();
 
-  // Método para lidar com o envio do formulário
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Adicionar lógica de envio do formulário
-      // Se o formulário for válido, execute a ação de envio
-      // Você pode coletar os dados aqui:
-      // String topic = _caixaController.text;
-      // String text = _descricaoController.text;
-      // Future<http.Response> formulario() {
-      //   return http.post(
-      //     Uri.parse('http://seu-servidor-glpi/apirest.php/Ticket'),
-      //     headers: 
-      //       <String, String>{'Content-Type': 'application/json'},
-      //       <String, String>{'Session-Token': "83af7e620c83a50a18d3eac2f6ed05a3ca0bea62"},
-      //       <String, String> {"App-Token: f7g3csp8mgatg5ebc5elnazakw20i9fyev1qopya7"},
-      //       -d '{"input": {"name": "My single computer", "serial": "12345"}}' \
-      //   );
-      // }
+      // TODO: Identificar atributos para abertura do chamado
+      // Número do caixa = _caixaController.text;
+      // Descrição do problema = _descricaoController.text;
+      Future<http.Response> formulario() {
+        return http.post(
+          Uri.parse('${dotenv.env['API_URL']}Ticket'),
+          headers: 
+            <String, String>{'Content-Type': 'application/json', 
+            'Session-Token': widget.sessionToken,
+            'App-Token': dotenv.env['APP_TOKEN']!},
+          body: '{"input": {"name": "Meu único computador", "serial": "12345"}}',
+        );
+      }
+      final resposta = formulario();
+      if (resposta.statusCode == 200) {
+        // Chamado criado com sucesso
+      } else {
+        // Falha ao criar chamado
+      }
 
-      // Exemplo de como mostrar uma mensagem de sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Formulário enviado com sucesso!')),
       );
 
-      // Limpar os campos após o envio
       _caixaController.clear();
       _descricaoController.clear();
-      Navigator.pop(context);
+      Navigator.pop(context, widget.sessionToken);
     }
   }
 
@@ -61,7 +61,7 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo Chamado'),
+        title: Text('Novo Chamado - ${widget.caso}'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -71,7 +71,6 @@ class _FormPageState extends State<FormPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Campo para o Tópico
               TextFormField(
                 controller: _caixaController,
                 decoration: const InputDecoration(
@@ -87,8 +86,7 @@ class _FormPageState extends State<FormPage> {
                 },
               ),
               const SizedBox(height: 16),
-
-              // Campo para o Texto
+              
               TextFormField(
                 controller: _descricaoController,
                 maxLines: 5,
@@ -101,7 +99,6 @@ class _FormPageState extends State<FormPage> {
               ),
               const SizedBox(height: 16),
 
-              // Botão de Anexos
               ElevatedButton.icon(
                 onPressed: () {
                   // TODO: Lógica para selecionar anexos
@@ -117,7 +114,6 @@ class _FormPageState extends State<FormPage> {
               ),
               const SizedBox(height: 24),
 
-              // Botão de Envio
               ElevatedButton(
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
@@ -131,4 +127,8 @@ class _FormPageState extends State<FormPage> {
       ),
     );
   }
+}
+
+extension on Future<http.Response> {
+  get statusCode => null;
 }
