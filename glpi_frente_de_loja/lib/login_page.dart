@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _senhaController = TextEditingController();
 
@@ -27,7 +28,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<http.Response> authenticate(String username, String password) async {
     String basicAuth = 'Basic ${LoginPage.base64.encode(utf8.encode('$username:$password'))}';
-    return await http.get(
+    try {
+      final response = await http.get(
       Uri.parse('${dotenv.env['API_URL']}initSession'),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -35,6 +37,10 @@ class _LoginPageState extends State<LoginPage> {
         'App-Token': dotenv.env['APP_TOKEN']!,
         },
     );
+      return response;
+    } catch (e) {
+      return Future.error('Erro na autenticação: $e');
+    }
   }
 
   @override
@@ -63,42 +69,64 @@ class _LoginPageState extends State<LoginPage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              SizedBox(
-                width: queryData.size.width * 0.6,
-                child: TextField(
-                  controller: _loginController,
-                  decoration: const InputDecoration(
-                    labelText: 'Login',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: queryData.size.width * 0.6,
-                child:  TextField(
-                  controller: _senhaController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Senha',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  final sessao = authenticate(_loginController.text, _senhaController.text);
-                  if (sessao.statusCode == 200) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage(sessionToken: sessao.body,)),
-                    );
-                  } else {
-                    throw sessao.statusCode;
-                  }
-                },
-                child: const Text('Entrar'),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: queryData.size.width * 0.6,
+                      child: TextFormField(
+                        controller: _loginController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Login',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: queryData.size.width * 0.6,
+                      child:  TextFormField(
+                        controller: _senhaController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Senha',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final sessao = authenticate(_loginController.text, _senhaController.text);
+                          if (sessao.statusCode == 200) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomePage(sessionToken: sessao.body,)),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Entrar'),
+                    ),
+                ],)
               ),
             ],
           ),
